@@ -66,6 +66,9 @@ public class UsersController extends HttpServlet {
 			case ControllerUtil.CRUD_RESTAURAR: 
 				service.restore(bean.getIdentifier().toString());
 				break;
+			case ControllerUtil.CRUD_ELIMINATE: 
+				service.eliminate(bean.getIdentifier().toString());
+				break;
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + accion);
 			}

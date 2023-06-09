@@ -22,6 +22,7 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 	private final String SQL_UPDATE = "UPDATE users SET names=?, last_name=?, document_type=?, document_number=?, email=?, cellphone=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE users SET states='I' WHERE identifier=?";
 	private final String SQL_RESTORE = "UPDATE users SET states='A' WHERE identifier=?";
+	private final String SQL_ELIMINATE = "DELETE FROM users WHERE identifier=?";
 
 	@Override
 	public List<Users> getActive() {
@@ -204,7 +205,7 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 			filas = pstm.executeUpdate();
 			pstm.close();
 			if (filas != 1) {
-				throw new SQLException("No se pudo eliminar el empleado.");
+				throw new SQLException("No se pudo eliminar el usuario.");
 			}
 			cn.commit();
 		} catch (SQLException e) {
@@ -231,7 +232,34 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 			filas = pstm.executeUpdate();
 			pstm.close();
 			if (filas != 1) {
-				throw new SQLException("No se pudo eliminar el empleado.");
+				throw new SQLException("No se pudo restaurar el usuario.");
+			}
+			cn.commit();
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e2) {
+			}
+		}
+	}
+
+	@Override
+	public void eliminate(String identifier) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		int filas = 0;
+		try {
+			// Inicio de Tx
+			cn = AccesoDB.getConnection();
+			cn.setAutoCommit(false);
+			pstm = cn.prepareStatement(SQL_ELIMINATE);
+			pstm.setInt(1, Integer.parseInt(identifier));
+			filas = pstm.executeUpdate();
+			pstm.close();
+			if (filas != 1) {
+				throw new SQLException("No se pudo eliminar el usuario.");
 			}
 			cn.commit();
 		} catch (SQLException e) {

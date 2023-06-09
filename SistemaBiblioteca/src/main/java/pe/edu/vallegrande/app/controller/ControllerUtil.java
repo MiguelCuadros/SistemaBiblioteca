@@ -14,6 +14,7 @@ public class ControllerUtil {
 	public final static String CRUD_EDITAR = "EDITAR";
 	public final static String CRUD_ELIMINAR = "ELIMINAR";
 	public final static String CRUD_RESTAURAR = "RESTAURAR";
+	public final static String CRUD_ELIMINATE = "ELIMINATE";
 	
 	
 	public static void responseJson(HttpServletResponse response, String data) {

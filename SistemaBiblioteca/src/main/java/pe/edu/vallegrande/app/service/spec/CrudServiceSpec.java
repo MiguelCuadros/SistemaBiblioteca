@@ -43,7 +43,7 @@ public interface CrudServiceSpec<T> {
 	void update(T bean);
 
 	/**
-	 * Elimina un registro de la base de datos.
+	 * Elimina un registro de la base de datos de manera logica.
 	 * @param id El id del registro a eliminar.
 	 */
 	void delete(String identifier);
@@ -53,5 +53,11 @@ public interface CrudServiceSpec<T> {
 	 * @param id El id del registro a eliminar.
 	 */
 	void restore(String identifier);
+
+	/**
+	 * Elimina un registro de la base de datos.
+	 * @param id El id del registro a eliminar.
+	 */
+	void eliminate(String identifier);
 
 }

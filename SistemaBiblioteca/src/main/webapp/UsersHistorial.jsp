@@ -86,12 +86,37 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		const ACCION_RESTAURAR = "RESTAURAR";
+		const ACCION_ELIMINATE = "ELIMINATE";
 	
 		let btnActualizar = document.getElementById("btnActualizar");
 
 		let arreglo = [];
 
 		btnActualizar.addEventListener("click", fnBtnActualizar);
+		
+		function fnEliminar(identifier) {
+			Swal.fire({
+				  title: 'Quieres eliminar el Usuario?',
+				  text: "El usuario se eliminara permanentemente!",
+				  icon: 'warning',
+				  showCancelButton: true,
+				  confirmButtonColor: '#3085d6',
+				  cancelButtonColor: '#d33',
+				  confirmButtonText: 'Si, bórralo!',
+				  cancelButtonText: 'Cancelar'
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				    Swal.fire(
+				      'Usuario eliminado!',
+				      'El usuario se eliminado, no podras recuperarlo.',
+				      'success'
+				    )
+					document.getElementById("accion").value = ACCION_ELIMINATE;
+					fnCargarForm(identifier);
+					fnBtnProcesar();
+				  }
+				})
+		}
 		
 		function fnRestaurar(identifier) {
 			Swal.fire('Good job!', 'You clicked the button!', 'success')
@@ -144,8 +169,8 @@
 								resultadoTabla += "<td>" + item.cellphone
 										+ "</td>";
 								resultadoTabla += "<td>";
-								resultadoTabla += "<a class='btn btn-primary' href='javascript:fnRestaurar("
-										+ item.identifier + ");'>Restaurar</a> ";
+								resultadoTabla += "<a class='btn btn-primary' href='javascript:fnRestaurar(" + item.identifier + ");'>Restaurar</a> ";
+								resultadoTabla += "<a class='btn btn-primary' href='javascript:fnEliminar(" + item.identifier + ");'>Eliminar</a> ";
 								resultadoTabla += "</td>";
 								resultadoTabla += "</tr>";
 							});
