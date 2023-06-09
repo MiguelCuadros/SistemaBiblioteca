@@ -1,0 +1,261 @@
+package pe.edu.vallegrande.app.service;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import pe.edu.vallegrande.app.db.AccesoDB;
+import pe.edu.vallegrande.app.model.Users;
+import pe.edu.vallegrande.app.service.spec.CrudServiceSpec;
+import pe.edu.vallegrande.app.service.spec.RowMapper;
+
+public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users> {
+
+	private final String SQL_SELECT_ACTIVE = "SELECT identifier, names, last_name, document_type, document_number, email, cellphone, states FROM users WHERE states='A'";
+	private final String SQL_SELECT_INACTIVE = "SELECT identifier, names, last_name, document_type, document_number, email, cellphone, states FROM users WHERE states='I'";
+	private final String SQL_SELECT_ID = "SELECT identifier, names, last_name, document_type, document_number, email, cellphone, states FROM users WHERE identifier=? AND states='A'";
+	private final String SQL_SELECT_LIKE = "SELECT identifier, names, last_name, document_type, document_number, email, cellphone, states FROM users WHERE names LIKE ? AND last_name LIKE ? AND states='A'";
+	private final String SQL_INSERT = "INSERT INTO users (names, last_name, document_type, document_number, email, cellphone) VALUES (?,?,?,?,?,?)";
+	private final String SQL_UPDATE = "UPDATE users SET names=?, last_name=?, document_type=?, document_number=?, email=?, cellphone=? WHERE identifier=?";
+	private final String SQL_DELETE = "UPDATE users SET states='I' WHERE identifier=?";
+	private final String SQL_RESTORE = "UPDATE users SET states='A' WHERE identifier=?";
+
+	@Override
+	public List<Users> getActive() {
+		List<Users> lista = new ArrayList<>();
+		try (Connection cn = AccesoDB.getConnection();
+				PreparedStatement pstm = cn.prepareStatement(SQL_SELECT_ACTIVE);
+				ResultSet rs = pstm.executeQuery();) {
+			while (rs.next()) {
+				Users bean = mapRow(rs);
+				lista.add(bean);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	@Override
+	public List<Users> getInactive() {
+		List<Users> lista = new ArrayList<>();
+		try (Connection cn = AccesoDB.getConnection();
+				PreparedStatement pstm = cn.prepareStatement(SQL_SELECT_INACTIVE);
+				ResultSet rs = pstm.executeQuery();) {
+			while (rs.next()) {
+				Users bean = mapRow(rs);
+				lista.add(bean);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	@Override
+	public Users getForId(String identifier) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		Users bean = null;
+		try {
+			cn = AccesoDB.getConnection();
+			pstm = cn.prepareStatement(SQL_SELECT_ID);
+			pstm.setInt(1, Integer.parseInt(identifier));
+			rs = pstm.executeQuery();
+			if(rs.next()) {
+				bean = mapRow(rs);
+			}
+			rs.close();
+			pstm.close();
+		} catch (SQLException e) {
+			throw new RuntimeException();
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e2) {
+			}
+		}
+		return bean;
+	}
+
+	@Override
+	public List<Users> get(Users bean) {
+		Connection cn = null;
+		List<Users> lista = new ArrayList<>();
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		Users item;
+		String names, last_name;
+		names = "%" + UtilService.setStringVacio(bean.getNames()) + "%";
+		last_name = "%" + UtilService.setStringVacio(bean.getLast_name()) + "%";
+		try {
+			cn = AccesoDB.getConnection();
+			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
+			pstm.setString(1, names);
+			pstm.setString(2, last_name);
+			rs = pstm.executeQuery();
+			while(rs.next()) {
+				item = mapRow(rs);
+				lista.add(item);
+			}
+			rs.close();
+			pstm.close();
+		} catch (SQLException e) {
+			throw new RuntimeException();
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e2) {
+			}
+		}
+		return lista;
+	}
+
+	@Override
+	public void insert(Users bean) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		int filas;
+		try {
+			cn = AccesoDB.getConnection();
+			cn.setAutoCommit(false);
+			pstm = cn.prepareStatement(SQL_INSERT);
+			pstm.setString(1, bean.getNames());
+			pstm.setString(2, bean.getLast_name());
+			pstm.setString(3, bean.getDocument_type());
+			pstm.setString(4, bean.getDocument_number());
+			pstm.setString(5, bean.getEmail());
+			pstm.setString(6, bean.getCellphone());
+			filas = pstm.executeUpdate();
+			pstm.close();
+			if (filas != 1) {
+				throw new SQLException("Error, verifique sus datos e intentelo nuevamente.");
+			}
+			cn.commit();
+		} catch (Exception e) {
+			try {
+				cn.rollback();
+				cn.close();
+			} catch (Exception e2) {
+			}
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	@Override
+	public void update(Users bean) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		int filas;
+		try {
+			cn = AccesoDB.getConnection();
+			cn.setAutoCommit(false);
+			pstm = cn.prepareStatement(SQL_UPDATE);
+			pstm.setString(1, bean.getNames());
+			pstm.setString(2, bean.getLast_name());
+			pstm.setString(3, bean.getDocument_type());
+			pstm.setString(4, bean.getDocument_number());
+			pstm.setString(5, bean.getEmail());
+			pstm.setString(6, bean.getCellphone());
+			pstm.setInt(7, bean.getIdentifier());
+			filas = pstm.executeUpdate();
+			pstm.close();
+			if (filas != 1) {
+				throw new SQLException("Error, verifique sus datos e intentelo nuevamente.");
+			}
+			cn.commit();
+		} catch (Exception e) {
+			try {
+				cn.rollback();
+				cn.close();
+			} catch (Exception e2) {
+			}
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	@Override
+	public void delete(String identifier) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		int filas = 0;
+		try {
+			// Inicio de Tx
+			cn = AccesoDB.getConnection();
+			cn.setAutoCommit(false);
+			pstm = cn.prepareStatement(SQL_DELETE);
+			pstm.setInt(1, Integer.parseInt(identifier));
+			filas = pstm.executeUpdate();
+			pstm.close();
+			if (filas != 1) {
+				throw new SQLException("No se pudo eliminar el empleado.");
+			}
+			cn.commit();
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e2) {
+			}
+		}
+	}
+
+	@Override
+	public void restore(String identifier) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		int filas = 0;
+		try {
+			// Inicio de Tx
+			cn = AccesoDB.getConnection();
+			cn.setAutoCommit(false);
+			pstm = cn.prepareStatement(SQL_RESTORE);
+			pstm.setInt(1, Integer.parseInt(identifier));
+			filas = pstm.executeUpdate();
+			pstm.close();
+			if (filas != 1) {
+				throw new SQLException("No se pudo eliminar el empleado.");
+			}
+			cn.commit();
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			try {
+				cn.close();
+			} catch (Exception e2) {
+			}
+		}
+	}
+
+	@Override
+	public Users mapRow(ResultSet rs) throws SQLException {
+		Users bean = new Users();
+		bean.setIdentifier(rs.getInt("identifier"));
+		bean.setNames(rs.getString("names"));
+		bean.setLast_name(rs.getString("last_name"));
+		bean.setDocument_type(rs.getString("document_type"));
+		bean.setDocument_number(rs.getString("document_number"));
+		bean.setEmail(rs.getString("email"));
+		bean.setCellphone(rs.getString("cellphone"));
+		bean.setActive(rs.getString("states"));
+		return bean;
+	}
+
+}
