@@ -22,11 +22,11 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Lista de Usuarios</h1>
+					<h1 class="mt-4">Usuarios Eliminados</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item">Dashboard</li>
 						<li class="breadcrumb-item">Usuarios</li>
-						<li class="breadcrumb-item active">Lista</li>
+						<li class="breadcrumb-item active">Eliminados</li>
 					</ol>
 					<div class="card-body">
 						<form method="post" action="#">
@@ -34,22 +34,6 @@
 								<div class="col-sm d-none">
 									<button type="button" class="btn d-none" id="btnActualizar"
 										name="btnActualizar">Actualizar</button>
-								</div>
-								<div class="col-sm-4">
-									<input type="text" class="form-control" id="names" name="names"
-										placeholder="Ingrese nombre">
-								</div>
-								<div class="col-sm-4">
-									<input type="text" class="form-control" id="last_name"
-										name="last_name" placeholder="Ingrese apellido">
-								</div>
-								<div class="col-sm-2">
-									<button type="button" class="btn btn-primary mb-2"
-										id="btnBuscar" name="btnBuscar">Buscar</button>
-								</div>
-								<div class="col-sm-2">
-									<button type="button" class="btn btn-success float-end mb-2"
-										id="btnNuevo" name="btnNuevo">Nuevo</button>
 								</div>
 							</div>
 						</form>
@@ -90,7 +74,7 @@
 								</div>
 								<div class="col-md-4">
 									<label for="frmNames" class="form-label">Nombre</label> <input
-										type="text" class="form-control" id="frmNames" value="" required>
+										type="text" class="form-control" id="frmNames" required>
 									<div class="valid-feedback">¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
 								</div>
@@ -145,7 +129,8 @@
 			<jsp:include page="footer.jsp"></jsp:include>
 		</div>
 	</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -153,16 +138,13 @@
 <script>
 	
 	// Constantes del CRUD
-	const ACCION_NUEVO = "NUEVO";
-	const ACCION_EDITAR = "EDITAR";
-	const ACCION_ELIMINAR = "ELIMINAR";
+	const ACCION_RESTAURAR = "RESTAURAR";
+	const ACCION_ELIMINAR = "ELIMINATE";
 
 	// Arreglo de registros
 	let arreglo = [];
 	
 	// Acceder a los controles
-	let btnBuscar = document.getElementById("btnBuscar");
-	let btnNuevo = document.getElementById("btnNuevo");
 	let btnProcesar = document.getElementById("btnProcesar");
 	let btnActualizar = document.getElementById("btnActualizar");
 	
@@ -177,18 +159,20 @@
 	let frmCellphone = document.getElementById('frmCellphone');
 
 	// Programar los controles
-	btnBuscar.addEventListener("click", fnBtnBuscar);
-	btnNuevo.addEventListener("click", fnBtnNuevo);
 	btnProcesar.addEventListener("click", fnBtnProcesar);
 	btnActualizar.addEventListener("click", fnBtnActualizar);
 
 	// Funcion fnEditar
-	function fnEditar(identifier) {
-		document.getElementById("accion").value = ACCION_EDITAR;
+	function fnRestaurar(identifier) {
+		Swal.fire(
+		  'Good job!',
+		  'You clicked the button!',
+		  'success'
+		)
+		document.getElementById("accion").value = ACCION_RESTAURAR;
 		fnCargarForm(identifier);
-		fnEstadoFormulario(ACCION_EDITAR);
-		document.getElementById("divResultado").style.display = "none";
-		document.getElementById("divRegistro").style.display = "block";
+		fnBtnProcesar();
+		setTimeout(fnBtnActualizar, 1000);
 	}
 
 	// Funcion fnEliminar
@@ -239,51 +223,10 @@
 		};
 		xhr.send(datos);
 	}
-
-	function fnBtnNuevo() {
-		document.getElementById("accion").value = ACCION_NUEVO;
-		fnEstadoFormulario(ACCION_NUEVO);
-		document.getElementById("divResultado").style.display = "none";
-		document.getElementById("divRegistro").style.display = "block";
-	}
-
-	function fnBtnBuscar() {
-		let names = document.getElementById("names").value;
-		let last_name = document.getElementById("last_name").value;
-		let url = "UsersBuscar?names=" + names + "&last_name=" + last_name;
-		let xhttp = new XMLHttpRequest();
-		xhttp.open("GET", url, true);
-		xhttp.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-				let respuesta = xhttp.responseText;
-				arreglo = JSON.parse(respuesta);
-				let detalleTabla = "";
-				arreglo.forEach(function(item) {
-							detalleTabla += "<tr>";
-							detalleTabla += "<td>" + item.identifier + "</td>";
-							detalleTabla += "<td>" + item.names + "</td>";
-							detalleTabla += "<td>" + item.last_name + "</td>";
-							detalleTabla += "<td>" + item.document_type + "</td>";
-							detalleTabla += "<td>" + item.document_number + "</td>";
-							detalleTabla += "<td>" + item.email + "</td>";
-							detalleTabla += "<td>" + item.cellphone + "</td>";
-							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
-							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
-							detalleTabla += "</td>";
-							detalleTabla += "</tr>";
-						});
-				document.getElementById("detalleTabla").innerHTML = detalleTabla;
-				document.getElementById("divResultado").style.display = "block";
-				document.getElementById("divRegistro").style.display = "none";
-			}
-		};
-		xhttp.send();
-	}
 	
 	function fnBtnActualizar() {
 		let xhttp = new XMLHttpRequest();
-		xhttp.open("GET", "UsersActualizar", true);
+		xhttp.open("GET", "UsersHistorial", true);
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				let respuesta = xhttp.responseText;
@@ -299,7 +242,7 @@
 							detalleTabla += "<td>" + item.email + "</td>";
 							detalleTabla += "<td>" + item.cellphone + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-success' href='javascript:fnRestaurar(" + item.identifier + ");'><i class='fa-solid fa-trash-arrow-up'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";
@@ -327,24 +270,6 @@
 				return true;
 			}
 		});
-	}
-	
-	function fnEstadoFormulario(estado){
-		frmNames.disabled = (estado==ACCION_ELIMINAR)
-		frmLast_name.disabled = (estado==ACCION_ELIMINAR)
-		frmDocument_type.disabled = (estado==ACCION_ELIMINAR)
-		frmDocument_number.disabled = (estado==ACCION_ELIMINAR)
-		frmEmail.disabled = (estado==ACCION_ELIMINAR)
-		frmCellphone.disabled = (estado==ACCION_ELIMINAR)
-		if(estado==ACCION_NUEVO){
-			frmIdentifier.value = "0";
-			frmNames.value = "";
-			frmLast_name.value = "";
-			frmDocument_type.value = "";
-			frmDocument_number.value = "";
-			frmEmail.value = "";
-			frmCellphone.value = "";
-		}
 	}
 	
 	function fnValidar(){
