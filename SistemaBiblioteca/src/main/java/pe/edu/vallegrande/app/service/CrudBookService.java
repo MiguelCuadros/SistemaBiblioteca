@@ -14,11 +14,11 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	
-	private final String SQL_SELECT_ACTIVE = "SELECT identifier, title, stock, isbn, category_identifier, author_identifier, active FROM book WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT identifier, title, stock, isbn, category_identifier, author_identifier, active FROM book WHERE active='I'";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM book WHERE active='A'";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM book WHERE active='I'";
 	private final String SQL_SELECT_ID = "SELECT identifier, title, stock, isbn, category_identifier, author_identifier, active FROM book WHERE identifier=? AND active='A'";
 	private final String SQL_SELECT_LIKE = "SELECT identifier, title, stock, isbn, category_identifier, author_identifier, active FROM book WHERE title LIKE ? AND active='A'";
-	private final String SQL_INSERT = "INSERT INTO book (title, stock, isbn, category_identifier, author_identifier) VALUES (?,?,?,?,?)";
+	private final String SQL_INSERT = "INSERT INTO book (title, stock, ISBN, category_identifier, author_identifier) VALUES (?,?,?,?,?)";
 	private final String SQL_UPDATE = "UPDATE book SET title=?, stock=?, isbn=?, category_identifier=?, author_identifier=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE book SET active='I' WHERE identifier=?";
 	private final String SQL_RESTORE = "UPDATE book SET active='A' WHERE identifier=?";
@@ -274,7 +274,7 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 		bean.setIdentifier(rs.getInt("identifier"));
 		bean.setTitle(rs.getString("title"));
 		bean.setStock(rs.getString("stock"));
-		bean.setIsbn(rs.getString("isbn"));
+		bean.setIsbn(rs.getString("ISBN"));
 		bean.setCategory_identifier(rs.getInt("category_identifier"));
 		bean.setAuthor_identifier(rs.getInt("author_identifier"));
 		bean.setActive(rs.getString("active"));

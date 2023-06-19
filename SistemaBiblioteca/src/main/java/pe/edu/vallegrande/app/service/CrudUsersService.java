@@ -14,10 +14,10 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users> {
 
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM users_active";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM users_inactive";
-	private final String SQL_SELECT_ID = "SELECT * FROM users_active WHERE identifier=?";
-	private final String SQL_SELECT_LIKE = "SELECT * FROM users_active WHERE names LIKE ? AND last_name LIKE ?";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM users WHERE active='A'";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM users WHERE active='I'";
+	private final String SQL_SELECT_ID = "SELECT * FROM users WHERE active='A' AND identifier=?";
+	private final String SQL_SELECT_LIKE = "SELECT * FROM users WHERE names LIKE ? AND last_name LIKE ? AND active='A'";
 	private final String SQL_INSERT = "INSERT INTO users (names, last_name, document_type, document_number, email, cellphone) VALUES (?,?,?,?,?,?)";
 	private final String SQL_UPDATE = "UPDATE users SET names=?, last_name=?, document_type=?, document_number=?, email=?, cellphone=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE users SET active='I' WHERE identifier=?";
