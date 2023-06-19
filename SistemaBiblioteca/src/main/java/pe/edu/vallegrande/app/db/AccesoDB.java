@@ -12,9 +12,9 @@ public class AccesoDB {
 	public static Connection getConnection() throws SQLException {
 		Connection cn = null;
 		String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String urlDB = "jdbc:sqlserver://miguelcg.database.windows.net:1433;databaseName=dbBiblioTech;encrypt=true;TrustServerCertificate=True;";
-		String user="miguelcg";
-		String pass = "Miguel159angel";
+        String urlDB = "jdbc:sqlserver://localhost:1433;databaseName=dbBiblioTech;encrypt=true;TrustServerCertificate=True;";
+		String user="sa";
+		String pass = "1234";
 		try {
 			// Paso 1: Cargar el driver a memoria
 			Class.forName(driver).getDeclaredConstructor().newInstance();

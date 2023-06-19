@@ -4,64 +4,51 @@ public class Book {
 
 	private Integer identifier, category_identifier, author_identifier;
 	private String title, stock, isbn, active;
-	
+
 	public Book() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Book(Integer identifier, Integer category_identifier, Integer author_identifier, String title, String stock,
-			String isbn, String active) {
+	public Book(Integer identifier, String title, String stock, String isbn, Integer category_identifier,
+			Integer author_identifier, String active) {
 		super();
-		this.identifier = identifier;
-		this.category_identifier = category_identifier;
 		this.author_identifier = author_identifier;
 		this.title = title;
 		this.stock = stock;
 		this.isbn = isbn;
+		this.identifier = identifier;
+		this.category_identifier = category_identifier;
 		this.active = active;
 	}
 
-	public Book(Integer category_identifier, Integer author_identifier, String title, String stock, String isbn,
-			String active) {
+	public Book(String title, String stock, String isbn, Integer category_identifier,
+			Integer author_identifier, String active) {
 		super();
-		this.category_identifier = category_identifier;
-		this.author_identifier = author_identifier;
 		this.title = title;
 		this.stock = stock;
 		this.isbn = isbn;
+		this.category_identifier = category_identifier;
+		this.author_identifier = author_identifier;
 		this.active = active;
 	}
 
-	public Book(Integer category_identifier, Integer author_identifier, String title, String stock, String isbn) {
+	public Book(Integer identifier, String title, String stock,
+			String isbn, Integer category_identifier, Integer author_identifier) {
 		super();
-		this.category_identifier = category_identifier;
-		this.author_identifier = author_identifier;
+		this.identifier = identifier;
 		this.title = title;
 		this.stock = stock;
 		this.isbn = isbn;
-	}
-
-	public Integer getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(Integer identifier) {
-		this.identifier = identifier;
-	}
-
-	public Integer getCategory_identifier() {
-		return category_identifier;
-	}
-
-	public void setCategory_identifier(Integer category_identifier) {
 		this.category_identifier = category_identifier;
+		this.author_identifier = author_identifier;
 	}
 
-	public Integer getAuthor_identifier() {
-		return author_identifier;
-	}
-
-	public void setAuthor_identifier(Integer author_identifier) {
+	public Book(String title, String stock, String isbn, Integer category_identifier, Integer author_identifier) {
+		super();
+		this.title = title;
+		this.stock = stock;
+		this.isbn = isbn;
+		this.category_identifier = category_identifier;
 		this.author_identifier = author_identifier;
 	}
 
@@ -96,7 +83,31 @@ public class Book {
 	public void setActive(String active) {
 		this.active = active;
 	}
-	
+
+	public Integer getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(Integer identifier) {
+		this.identifier = identifier;
+	}
+
+	public Integer getCategory_identifier() {
+		return category_identifier;
+	}
+
+	public void setCategory_identifier(Integer category_identifier) {
+		this.category_identifier = category_identifier;
+	}
+
+	public Integer getAuthor_identifier() {
+		return author_identifier;
+	}
+
+	public void setAuthor_identifier(Integer author_identifier) {
+		this.author_identifier = author_identifier;
+	}
+
 	@Override
 	public String toString() {
 		String data = "[ID: " + this.identifier;
