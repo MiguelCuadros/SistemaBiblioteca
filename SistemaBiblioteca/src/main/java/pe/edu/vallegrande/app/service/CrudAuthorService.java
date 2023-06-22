@@ -8,30 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pe.edu.vallegrande.app.db.AccesoDB;
-import pe.edu.vallegrande.app.model.Book;
+import pe.edu.vallegrande.app.model.Author;
 import pe.edu.vallegrande.app.service.spec.CrudServiceSpec;
 import pe.edu.vallegrande.app.service.spec.RowMapper;
 
-public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
-	
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM book WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM book WHERE active='I'";
-	private final String SQL_SELECT_ID = "SELECT identifier, title, stock, ISBN, category_identifier, author_identifier, active FROM book WHERE identifier=? AND active='A'";
-	private final String SQL_SELECT_LIKE = "SELECT identifier, title, stock, ISBN, category_identifier, author_identifier, active FROM book WHERE title LIKE ? AND ISBN LIKE ? AND active='A'";
-	private final String SQL_INSERT = "INSERT INTO book (title, stock, ISBN, category_identifier, author_identifier) VALUES (?,?,?,?,?)";
-	private final String SQL_UPDATE = "UPDATE book SET title=?, stock=?, ISBN=?, category_identifier=?, author_identifier=? WHERE identifier=?";
-	private final String SQL_DELETE = "UPDATE book SET active='I' WHERE identifier=?";
-	private final String SQL_RESTORE = "UPDATE book SET active='A' WHERE identifier=?";
-	private final String SQL_ELIMINATE = "DELETE FROM book WHERE identifier=?";
+public class CrudAuthorService implements CrudServiceSpec<Author>, RowMapper<Author> {
+
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM author WHERE active='A'";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM author WHERE active='I'";
+	private final String SQL_SELECT_ID = "SELECT * FROM author WHERE active='A' AND identifier=?";
+	private final String SQL_SELECT_LIKE = "SELECT * FROM author WHERE names LIKE ? AND last_name LIKE ? AND active='A'";
+	private final String SQL_INSERT = "INSERT INTO author (names, last_name, nacionality) VALUES (?,?,?)";
+	private final String SQL_UPDATE = "UPDATE author SET names=?, last_name=?, nacionality=? WHERE identifier=?";
+	private final String SQL_DELETE = "UPDATE author SET active='I' WHERE identifier=?";
+	private final String SQL_RESTORE = "UPDATE author SET active='A' WHERE identifier=?";
+	private final String SQL_ELIMINATE = "DELETE FROM author WHERE identifier=?";
 
 	@Override
-	public List<Book> getActive() {
-		List<Book> lista = new ArrayList<>();
+	public List<Author> getActive() {
+		List<Author> lista = new ArrayList<>();
 		try (Connection cn = AccesoDB.getConnection();
 				PreparedStatement pstm = cn.prepareStatement(SQL_SELECT_ACTIVE);
 				ResultSet rs = pstm.executeQuery();) {
 			while (rs.next()) {
-				Book bean = mapRow(rs);
+				Author bean = mapRow(rs);
 				lista.add(bean);
 			}
 		} catch (SQLException e) {
@@ -43,13 +43,13 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public List<Book> getInactive() {
-		List<Book> lista = new ArrayList<>();
+	public List<Author> getInactive() {
+		List<Author> lista = new ArrayList<>();
 		try (Connection cn = AccesoDB.getConnection();
 				PreparedStatement pstm = cn.prepareStatement(SQL_SELECT_INACTIVE);
 				ResultSet rs = pstm.executeQuery();) {
 			while (rs.next()) {
-				Book bean = mapRow(rs);
+				Author bean = mapRow(rs);
 				lista.add(bean);
 			}
 		} catch (SQLException e) {
@@ -61,11 +61,11 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public Book getForId(String identifier) {
+	public Author getForId(String identifier) {
 		Connection cn = null;
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		Book bean = null;
+		Author bean = null;
 		try {
 			cn = AccesoDB.getConnection();
 			pstm = cn.prepareStatement(SQL_SELECT_ID);
@@ -88,20 +88,20 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public List<Book> get(Book bean) {
+	public List<Author> get(Author bean) {
 		Connection cn = null;
-		List<Book> lista = new ArrayList<>();
+		List<Author> lista = new ArrayList<>();
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		Book item;
-		String title, isbn;
-		title = "%" + UtilService.setStringVacio(bean.getTitle()) + "%";
-		isbn = "%" + UtilService.setStringVacio(bean.getIsbn()) + "%";
+		Author item;
+		String names, last_name;
+		names = "%" + UtilService.setStringVacio(bean.getNames()) + "%";
+		last_name = "%" + UtilService.setStringVacio(bean.getLast_name()) + "%";
 		try {
 			cn = AccesoDB.getConnection();
 			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
-			pstm.setString(1, title);
-			pstm.setString(2, isbn);
+			pstm.setString(1, names);
+			pstm.setString(2, last_name);
 			rs = pstm.executeQuery();
 			while(rs.next()) {
 				item = mapRow(rs);
@@ -121,7 +121,7 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public void insert(Book bean) {
+	public void insert(Author bean) {
 		Connection cn = null;
 		PreparedStatement pstm = null;
 		int filas;
@@ -129,11 +129,9 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 			cn = AccesoDB.getConnection();
 			cn.setAutoCommit(false);
 			pstm = cn.prepareStatement(SQL_INSERT);
-			pstm.setString(1, bean.getTitle());
-			pstm.setString(2, bean.getStock());
-			pstm.setString(3, bean.getIsbn());
-			pstm.setInt(4, bean.getCategory_identifier());
-			pstm.setInt(5, bean.getAuthor_identifier());
+			pstm.setString(1, bean.getNames());
+			pstm.setString(2, bean.getLast_name());
+			pstm.setString(3, bean.getNacionality());
 			filas = pstm.executeUpdate();
 			pstm.close();
 			if (filas != 1) {
@@ -155,7 +153,7 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public void update(Book bean) {
+	public void update(Author bean) {
 		Connection cn = null;
 		PreparedStatement pstm = null;
 		int filas;
@@ -163,12 +161,10 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 			cn = AccesoDB.getConnection();
 			cn.setAutoCommit(false);
 			pstm = cn.prepareStatement(SQL_UPDATE);
-			pstm.setString(1, bean.getTitle());
-			pstm.setString(2, bean.getStock());
-			pstm.setString(3, bean.getIsbn());
-			pstm.setInt(4, bean.getCategory_identifier());
-			pstm.setInt(5, bean.getAuthor_identifier());
-			pstm.setInt(6, bean.getIdentifier());
+			pstm.setString(1, bean.getNames());
+			pstm.setString(2, bean.getLast_name());
+			pstm.setString(3, bean.getNacionality());
+			pstm.setInt(4, bean.getIdentifier());
 			filas = pstm.executeUpdate();
 			pstm.close();
 			if (filas != 1) {
@@ -271,14 +267,12 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	}
 
 	@Override
-	public Book mapRow(ResultSet rs) throws SQLException {
-		Book bean = new Book();
+	public Author mapRow(ResultSet rs) throws SQLException {
+		Author bean = new Author();
 		bean.setIdentifier(rs.getInt("identifier"));
-		bean.setTitle(rs.getString("title"));
-		bean.setStock(rs.getString("stock"));
-		bean.setIsbn(rs.getString("ISBN"));
-		bean.setCategory_identifier(rs.getInt("category_identifier"));
-		bean.setAuthor_identifier(rs.getInt("author_identifier"));
+		bean.setNames(rs.getString("names"));
+		bean.setLast_name(rs.getString("last_name"));
+		bean.setNacionality(rs.getString("nacionality"));
 		bean.setActive(rs.getString("active"));
 		return bean;
 	}

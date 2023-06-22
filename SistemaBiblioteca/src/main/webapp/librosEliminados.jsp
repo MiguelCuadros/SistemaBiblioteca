@@ -1,3 +1,8 @@
+<%@page import="pe.edu.vallegrande.app.model.Author"%>
+<%@page import="pe.edu.vallegrande.app.service.CrudAuthorService"%>
+<%@page import="pe.edu.vallegrande.app.service.CrudCategoryService"%>
+<%@page import="pe.edu.vallegrande.app.model.Category"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,10 +25,10 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Usuarios Eliminados</h1>
+					<h1 class="mt-4">Libros Eliminados</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item">Dashboard</li>
-						<li class="breadcrumb-item">Usuarios</li>
+						<li class="breadcrumb-item">Libros</li>
 						<li class="breadcrumb-item active">Eliminados</li>
 					</ol>
 					<div class="card-body">
@@ -45,12 +50,11 @@
 								<thead>
 									<tr>
 										<th scope="col">#</th>
-										<th scope="col">Nombre</th>
-										<th scope="col">Apellido</th>
-										<th scope="col">Tipo Documento</th>
-										<th scope="col">Nº Documento</th>
-										<th scope="col">Correo Electrónico</th>
-										<th scope="col">Nº Celular</th>
+										<th scope="col">Titulo</th>
+										<th scope="col">Stock</th>
+										<th scope="col">ISBN</th>
+										<th scope="col">Categoria</th>
+										<th scope="col">Autor</th>
 										<th scope="col">Accion</th>
 									</tr>
 								</thead>
@@ -70,50 +74,53 @@
 									<label for="frmIdentifier" class="form-label">ID</label> <input
 										type="text" class="form-control" id="frmIdentifier" required>
 								</div>
-								<div class="col-md-4">
-									<label for="frmNames" class="form-label">Nombre</label> <input
-										type="text" class="form-control" id="frmNames" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
-								</div>
-								<div class="col-md-4">
-									<label for="frmLast_name" class="form-label">Apellido</label>
-									<input type="text" class="form-control" id="frmLast_name"
+								<div class="col-md-5">
+									<label for="frmTitle" class="form-label">Titulo</label> <input
+										type="text" class="form-control" id="frmTitle" value=""
 										required>
 									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="invalid-feedback">Por favor, coloque algo
+										válido.</div>
+								</div>
+								<div class="col-md-2">
+									<label for="frmStock" class="form-label">Stock</label> <input
+										type="number" class="form-control" id="frmStock" required>
+									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo
+										válido.</div>
 								</div>
 								<div class="col-md-3">
-									<label for="frmDocument_type" class="form-label">Tipo Documento</label> <select
-										class="form-select" id="frmDocument_type" required>
+									<label for="frmIsbn" class="form-label">ISBN</label> <input
+										type="number" class="form-control" id="frmIsbn" required>
+									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo
+										válido.</div>
+								</div>
+								<div class="col-md-4">
+									<label for="frmCategory" class="form-label">Categoria</label> <select
+										class="form-select" id="frmCategory" required>
 										<option selected disabled value="">Elige...</option>
-										<option value="DNI">DNI</option>
-										<option value="CEX">CEX</option>
+										<% CrudCategoryService categoryService = new CrudCategoryService(); %>
+										<% List<Category> listaCategory = categoryService.getActive(); %>
+										<% for (Category category : listaCategory) { %>
+								            <option value="<%= category.getIdentifier() %>"><%= category.getNames() %></option>
+								        <% } %>
 									</select>
-									<div class="invalid-feedback">Seleccione un tipo de documento.</div>
-								</div>
-								<div class="col-md-3">
-									<label for="frmDocument_number" class="form-label">Nº Documento</label>
-									<input type="number" class="form-control" id="frmDocument_number"
-										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="invalid-feedback">Seleccione un tipo de
+										documento.</div>
 								</div>
 								<div class="col-md-4">
-									<label for="frmEmail" class="form-label">Correo
-										Electronico</label>
-									<div class="input-group has-validation">
-										<input type="text" class="form-control" id="frmEmail"
-											aria-describedby="inputGroupPrepend" required>
-										<div class="valid-feedback">¡Se ve bien!</div>
-										<div class="invalid-feedback">Por favor, coloque algo válido.</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label for="frmCellphone" class="form-label">Nº Celular</label> <input
-										type="number" class="form-control" id="frmCellphone" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<label for="frmAuthor" class="form-label">Autor</label> <select
+										class="form-select" id="frmAuthor" required>
+										<option selected disabled value="">Elige...</option>
+										<% CrudAuthorService authorService = new CrudAuthorService(); %>
+										<% List<Author> listaAuthor = authorService.getActive(); %>
+										<% for (Author author : listaAuthor) { %>
+											<option value="<%= author.getIdentifier() %>"><%= author.getLast_name().toUpperCase() %>, <%= author.getNames() %></option>
+										<% } %>
+									</select>
+									<div class="invalid-feedback">Seleccione un tipo de
+										documento.</div>
 								</div>
 								<div class="col-12">
 									<button class="btn btn-primary" id="btnProcesar" type="submit">Enviar
@@ -132,7 +139,6 @@
 		crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="js/usuarios.js"></script>
 <script>
 	
 	// Constantes del CRUD
@@ -149,12 +155,11 @@
 	// Campos del formulario
 	let accion = document.getElementById('accion');
 	let frmIdentifier = document.getElementById('frmIdentifier');
-	let frmNames = document.getElementById('frmNames');
-	let frmLast_name = document.getElementById('frmLast_name');
-	let frmDocument_type = document.getElementById('frmDocument_type');
-	let frmDocument_number = document.getElementById('frmDocument_number');
-	let frmEmail = document.getElementById('frmEmail');
-	let frmCellphone = document.getElementById('frmCellphone');
+	let frmTitle = document.getElementById('frmTitle');
+	let frmStock = document.getElementById('frmStock');
+	let frmIsbn = document.getElementById('frmIsbn');
+	let frmCategory = document.getElementById('frmCategory');
+	let frmAuthor = document.getElementById('frmAuthor');
 
 	// Programar los controles
 	btnProcesar.addEventListener("click", fnBtnProcesar);
@@ -205,14 +210,13 @@
 		}
 		let datos = "accion=" + document.getElementById("accion").value;
 		datos += "&identifier=" + document.getElementById("frmIdentifier").value;
-		datos += "&names=" + document.getElementById("frmNames").value;
-		datos += "&last_name=" + document.getElementById("frmLast_name").value;
-		datos += "&document_type=" + document.getElementById("frmDocument_type").value;
-		datos += "&document_number=" + document.getElementById("frmDocument_number").value;
-		datos += "&email=" + document.getElementById("frmEmail").value;
-		datos += "&cellphone=" + document.getElementById("frmCellphone").value;
+		datos += "&title=" + document.getElementById("frmTitle").value;
+		datos += "&stock=" + document.getElementById("frmStock").value;
+		datos += "&isbn=" + document.getElementById("frmIsbn").value;
+		datos += "&category_identifier=" + document.getElementById("frmCategory").value;
+		datos += "&author_identifier=" + document.getElementById("frmAuthor").value;
 		let xhr = new XMLHttpRequest();
-		xhr.open("POST", "UsersProcesar", true);
+		xhr.open("POST", "BookProcesar", true);
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
@@ -224,7 +228,7 @@
 	
 	function fnBtnActualizar() {
 		let xhttp = new XMLHttpRequest();
-		xhttp.open("GET", "UsersHistorial", true);
+		xhttp.open("GET", "BookHistorial", true);
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				let respuesta = xhttp.responseText;
@@ -233,12 +237,11 @@
 				arreglo.forEach(function(item) {
 							detalleTabla += "<tr>";
 							detalleTabla += "<td>" + item.identifier + "</td>";
-							detalleTabla += "<td>" + item.names + "</td>";
-							detalleTabla += "<td>" + item.last_name + "</td>";
-							detalleTabla += "<td>" + item.document_type + "</td>";
-							detalleTabla += "<td>" + item.document_number + "</td>";
-							detalleTabla += "<td>" + item.email + "</td>";
-							detalleTabla += "<td>" + item.cellphone + "</td>";
+							detalleTabla += "<td>" + item.title + "</td>";
+							detalleTabla += "<td>" + item.stock + "</td>";
+							detalleTabla += "<td>" + item.isbn + "</td>";
+							detalleTabla += "<td>" + item.category_identifier + "</td>";
+							detalleTabla += "<td>" + item.author_identifier + "</td>";
 							detalleTabla += "<td>";
 							detalleTabla += "<a class='btn btn-success' href='javascript:fnRestaurar(" + item.identifier + ");'><i class='fa-solid fa-trash-arrow-up'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
@@ -259,12 +262,11 @@
 		arreglo.forEach(function(item) {
 			if(item.identifier == identifier){
 				frmIdentifier.value = item.identifier;
-				frmNames.value = item.names;
-				frmLast_name.value = item.last_name;
-				frmDocument_type.value = item.document_type;
-				frmDocument_number.value = item.document_number;
-				frmEmail.value = item.email;
-				frmCellphone.value = item.cellphone;
+				frmTitle.value = item.title;
+				frmStock.value = item.stock;
+				frmIsbn.value = item.isbn;
+				frmCategory.value = item.category_identifier;
+				frmAuthor.value = item.author_identifier;
 				return true;
 			}
 		});

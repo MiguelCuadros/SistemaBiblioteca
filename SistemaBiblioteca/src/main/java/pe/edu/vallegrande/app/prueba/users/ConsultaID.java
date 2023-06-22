@@ -8,7 +8,7 @@ public class ConsultaID {
 	public static void main(String[] args) {
 		try {
 			CrudUsersService userService = new CrudUsersService();
-			Users bean = userService.getForId("5");
+			Users bean = userService.getForId("2");
 			System.out.println(bean);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());

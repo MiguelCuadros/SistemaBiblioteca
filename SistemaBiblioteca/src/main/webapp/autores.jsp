@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>Usuarios eliminados - SB Admin</title>
+<title>Usuarios - SB Admin</title>
 <link href="css/styles.css" rel="stylesheet" />
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -20,11 +20,11 @@
 		<div id="layoutSidenav_content">
 			<main>
 				<div class="container-fluid px-4">
-					<h1 class="mt-4">Usuarios Eliminados</h1>
+					<h1 class="mt-4">Lista de Autores</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item">Dashboard</li>
-						<li class="breadcrumb-item">Usuarios</li>
-						<li class="breadcrumb-item active">Eliminados</li>
+						<li class="breadcrumb-item">Autores</li>
+						<li class="breadcrumb-item active">Lista</li>
 					</ol>
 					<div class="card-body">
 						<form method="post" action="#">
@@ -32,6 +32,22 @@
 								<div class="col-sm d-none">
 									<button type="button" class="btn d-none" id="btnActualizar"
 										name="btnActualizar">Actualizar</button>
+								</div>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="names" name="names"
+										placeholder="Ingrese nombre">
+								</div>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" id="last_name"
+										name="last_name" placeholder="Ingrese apellido">
+								</div>
+								<div class="col-sm-2">
+									<button type="button" class="btn btn-primary mb-2"
+										id="btnBuscar" name="btnBuscar">Buscar</button>
+								</div>
+								<div class="col-sm-2">
+									<button type="button" class="btn btn-success float-end mb-2"
+										id="btnNuevo" name="btnNuevo">Nuevo</button>
 								</div>
 							</div>
 						</form>
@@ -47,10 +63,7 @@
 										<th scope="col">#</th>
 										<th scope="col">Nombre</th>
 										<th scope="col">Apellido</th>
-										<th scope="col">Tipo Documento</th>
-										<th scope="col">Nº Documento</th>
-										<th scope="col">Correo Electrónico</th>
-										<th scope="col">Nº Celular</th>
+										<th scope="col">Nacionalidad</th>
 										<th scope="col">Accion</th>
 									</tr>
 								</thead>
@@ -72,7 +85,7 @@
 								</div>
 								<div class="col-md-4">
 									<label for="frmNames" class="form-label">Nombre</label> <input
-										type="text" class="form-control" id="frmNames" required>
+										type="text" class="form-control" id="frmNames" value="" required>
 									<div class="valid-feedback">¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
 								</div>
@@ -83,35 +96,10 @@
 									<div class="valid-feedback">¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
 								</div>
-								<div class="col-md-3">
-									<label for="frmDocument_type" class="form-label">Tipo Documento</label> <select
-										class="form-select" id="frmDocument_type" required>
-										<option selected disabled value="">Elige...</option>
-										<option value="DNI">DNI</option>
-										<option value="CEX">CEX</option>
-									</select>
-									<div class="invalid-feedback">Seleccione un tipo de documento.</div>
-								</div>
-								<div class="col-md-3">
-									<label for="frmDocument_number" class="form-label">Nº Documento</label>
-									<input type="number" class="form-control" id="frmDocument_number"
+								<div class="col-md-4">
+									<label for="frmNacionality" class="form-label">Nacionalidad</label>
+									<input type="text" class="form-control" id="frmNacionality"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
-								</div>
-								<div class="col-md-4">
-									<label for="frmEmail" class="form-label">Correo
-										Electronico</label>
-									<div class="input-group has-validation">
-										<input type="text" class="form-control" id="frmEmail"
-											aria-describedby="inputGroupPrepend" required>
-										<div class="valid-feedback">¡Se ve bien!</div>
-										<div class="invalid-feedback">Por favor, coloque algo válido.</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<label for="frmCellphone" class="form-label">Nº Celular</label> <input
-										type="number" class="form-control" id="frmCellphone" required>
 									<div class="valid-feedback">¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
 								</div>
@@ -127,22 +115,23 @@
 			<jsp:include page="footer.jsp"></jsp:include>
 		</div>
 	</div>
-<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="js/usuarios.js"></script>
 <script>
 	
 	// Constantes del CRUD
-	const ACCION_RESTAURAR = "RESTAURAR";
-	const ACCION_ELIMINAR = "ELIMINATE";
+	const ACCION_NUEVO = "NUEVO";
+	const ACCION_EDITAR = "EDITAR";
+	const ACCION_ELIMINAR = "ELIMINAR";
 
 	// Arreglo de registros
 	let arreglo = [];
 	
 	// Acceder a los controles
+	let btnBuscar = document.getElementById("btnBuscar");
+	let btnNuevo = document.getElementById("btnNuevo");
 	let btnProcesar = document.getElementById("btnProcesar");
 	let btnActualizar = document.getElementById("btnActualizar");
 	
@@ -151,26 +140,21 @@
 	let frmIdentifier = document.getElementById('frmIdentifier');
 	let frmNames = document.getElementById('frmNames');
 	let frmLast_name = document.getElementById('frmLast_name');
-	let frmDocument_type = document.getElementById('frmDocument_type');
-	let frmDocument_number = document.getElementById('frmDocument_number');
-	let frmEmail = document.getElementById('frmEmail');
-	let frmCellphone = document.getElementById('frmCellphone');
+	let frmNacionality = document.getElementById('frmNacionality');
 
 	// Programar los controles
+	btnBuscar.addEventListener("click", fnBtnBuscar);
+	btnNuevo.addEventListener("click", fnBtnNuevo);
 	btnProcesar.addEventListener("click", fnBtnProcesar);
 	btnActualizar.addEventListener("click", fnBtnActualizar);
 
 	// Funcion fnEditar
-	function fnRestaurar(identifier) {
-		Swal.fire(
-		  'Good job!',
-		  'You clicked the button!',
-		  'success'
-		)
-		document.getElementById("accion").value = ACCION_RESTAURAR;
+	function fnEditar(identifier) {
+		document.getElementById("accion").value = ACCION_EDITAR;
 		fnCargarForm(identifier);
-		fnBtnProcesar();
-		setTimeout(fnBtnActualizar, 1000);
+		fnEstadoFormulario(ACCION_EDITAR);
+		document.getElementById("divResultado").style.display = "none";
+		document.getElementById("divRegistro").style.display = "block";
 	}
 
 	// Funcion fnEliminar
@@ -207,12 +191,9 @@
 		datos += "&identifier=" + document.getElementById("frmIdentifier").value;
 		datos += "&names=" + document.getElementById("frmNames").value;
 		datos += "&last_name=" + document.getElementById("frmLast_name").value;
-		datos += "&document_type=" + document.getElementById("frmDocument_type").value;
-		datos += "&document_number=" + document.getElementById("frmDocument_number").value;
-		datos += "&email=" + document.getElementById("frmEmail").value;
-		datos += "&cellphone=" + document.getElementById("frmCellphone").value;
+		datos += "&nacionality=" + document.getElementById("frmNacionality").value;
 		let xhr = new XMLHttpRequest();
-		xhr.open("POST", "UsersProcesar", true);
+		xhr.open("POST", "AuthorProcesar", true);
 		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
@@ -221,10 +202,20 @@
 		};
 		xhr.send(datos);
 	}
-	
-	function fnBtnActualizar() {
+
+	function fnBtnNuevo() {
+		document.getElementById("accion").value = ACCION_NUEVO;
+		fnEstadoFormulario(ACCION_NUEVO);
+		document.getElementById("divResultado").style.display = "none";
+		document.getElementById("divRegistro").style.display = "block";
+	}
+
+	function fnBtnBuscar() {
+		let names = document.getElementById("names").value;
+		let last_name = document.getElementById("last_name").value;
+		let url = "AuthorBuscar?names=" + names + "&last_name=" + last_name;
 		let xhttp = new XMLHttpRequest();
-		xhttp.open("GET", "UsersHistorial", true);
+		xhttp.open("GET", url, true);
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				let respuesta = xhttp.responseText;
@@ -235,12 +226,37 @@
 							detalleTabla += "<td>" + item.identifier + "</td>";
 							detalleTabla += "<td>" + item.names + "</td>";
 							detalleTabla += "<td>" + item.last_name + "</td>";
-							detalleTabla += "<td>" + item.document_type + "</td>";
-							detalleTabla += "<td>" + item.document_number + "</td>";
-							detalleTabla += "<td>" + item.email + "</td>";
-							detalleTabla += "<td>" + item.cellphone + "</td>";
+							detalleTabla += "<td>" + item.nacionality + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnRestaurar(" + item.identifier + ");'><i class='fa-solid fa-trash-arrow-up'></i></a> ";
+							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
+							detalleTabla += "</td>";
+							detalleTabla += "</tr>";
+						});
+				document.getElementById("detalleTabla").innerHTML = detalleTabla;
+				document.getElementById("divResultado").style.display = "block";
+				document.getElementById("divRegistro").style.display = "none";
+			}
+		};
+		xhttp.send();
+	}
+	
+	function fnBtnActualizar() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.open("GET", "AuthorActualizar", true);
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				let respuesta = xhttp.responseText;
+				arreglo = JSON.parse(respuesta);
+				let detalleTabla = "";
+				arreglo.forEach(function(item) {
+							detalleTabla += "<tr>";
+							detalleTabla += "<td>" + item.identifier + "</td>";
+							detalleTabla += "<td>" + item.names + "</td>";
+							detalleTabla += "<td>" + item.last_name + "</td>";
+							detalleTabla += "<td>" + item.nacionality + "</td>";
+							detalleTabla += "<td>";
+							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";
@@ -261,13 +277,22 @@
 				frmIdentifier.value = item.identifier;
 				frmNames.value = item.names;
 				frmLast_name.value = item.last_name;
-				frmDocument_type.value = item.document_type;
-				frmDocument_number.value = item.document_number;
-				frmEmail.value = item.email;
-				frmCellphone.value = item.cellphone;
+				frmNacionality.value = item.nacionality;
 				return true;
 			}
 		});
+	}
+	
+	function fnEstadoFormulario(estado){
+		frmNames.disabled = (estado==ACCION_ELIMINAR)
+		frmLast_name.disabled = (estado==ACCION_ELIMINAR)
+		frmNacionality.disabled = (estado==ACCION_ELIMINAR)
+		if(estado==ACCION_NUEVO){
+			frmIdentifier.value = "0";
+			frmNames.value = "";
+			frmLast_name.value = "";
+			frmNacionality.value = "";
+		}
 	}
 	
 	function fnValidar(){

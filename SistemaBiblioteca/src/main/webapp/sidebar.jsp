@@ -41,8 +41,8 @@
 				<div class="collapse" id="collapseReservas"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="layout-static.html"></a>
-						<a class="nav-link" href="layout-sidenav-light.html"></a>
+						<a class="nav-link" href="reservas.jsp"></a>
+						<a class="nav-link" href="reservasEliminados.jsp"></a>
 					</nav>
 				</div>
 				<!-- Prestamos -->
@@ -59,8 +59,8 @@
 				<div class="collapse" id="collapsePrestamos"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="layout-static.html"></a>
-						<a class="nav-link" href="layout-sidenav-light.html"></a>
+						<a class="nav-link" href="prestamos.jsp"></a>
+						<a class="nav-link" href="prestamosEliminados.jsp"></a>
 					</nav>
 				</div>
 				<!-- Bibliotecario -->
@@ -79,8 +79,8 @@
 				<div class="collapse" id="collapseCategorias"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="layout-static.html"></a>
-						<a class="nav-link" href="layout-sidenav-light.html"></a>
+						<a class="nav-link" href="categorias.jsp">Lista</a>
+						<a class="nav-link" href="categoriasEliminados.jsp">Eliminados</a>
 					</nav>
 				</div>
 				<!-- Autores -->
@@ -97,8 +97,8 @@
 				<div class="collapse" id="collapseAutores"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="layout-static.html"></a>
-						<a class="nav-link" href="layout-sidenav-light.html"></a>
+						<a class="nav-link" href="autores.jsp">Lista</a>
+						<a class="nav-link" href="autoresEliminados.jsp">Eliminados</a>
 					</nav>
 				</div>
 				<!-- Libros -->
@@ -115,8 +115,8 @@
 				<div class="collapse" id="collapseLibros"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="layout-static.html"></a>
-						<a class="nav-link" href="layout-sidenav-light.html"></a>
+						<a class="nav-link" href="libros.jsp">Lista</a>
+						<a class="nav-link" href="librosEliminados.jsp">Eliminados</a>
 					</nav>
 				</div>
 			</div>

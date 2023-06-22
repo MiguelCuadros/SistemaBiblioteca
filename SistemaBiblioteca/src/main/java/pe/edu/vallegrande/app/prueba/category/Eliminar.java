@@ -1,13 +1,13 @@
-package pe.edu.vallegrande.app.prueba.users;
+package pe.edu.vallegrande.app.prueba.category;
 
-import pe.edu.vallegrande.app.service.CrudUsersService;
+import pe.edu.vallegrande.app.service.CrudCategoryService;
 
 public class Eliminar {
 
 	public static void main(String[] args) {
 		try {
-			CrudUsersService userService = new CrudUsersService();
-			userService.delete("6");
+			CrudCategoryService categoryService = new CrudCategoryService();
+			categoryService.delete("1");
 			System.out.println("Usuario eliminado correctamente.");
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
