@@ -7,7 +7,7 @@ public class Insertar {
 
 	public static void main(String[] args) {
 		try {
-			Book bean = new Book("La distancia que nos separa", "30", "9783906910567", 2, 2);
+			Book bean = new Book("La distancia que nos separa", "30", "9783906910567", "2", "2");
 			CrudBookService bookService = new CrudBookService();
 			bookService.insert(bean);
 			System.out.println(bean);

@@ -44,7 +44,7 @@ public class UsersController extends HttpServlet {
 		// Datos
 		String accion = request.getParameter("accion");
 		Users bean = new Users();
-		bean.setIdentifier(Integer.parseInt(request.getParameter("identifier")));;
+		bean.setIdentifier(Integer.parseInt(request.getParameter("identifier")));
 		bean.setNames(request.getParameter("names"));
 		bean.setLast_name(request.getParameter("last_name"));
 		bean.setDocument_type(request.getParameter("document_type"));
@@ -54,19 +54,19 @@ public class UsersController extends HttpServlet {
 		// Proceso
 		try {
 			switch (accion) {
-			case ControllerUtil.CRUD_NUEVO: 
+			case ControllerUtil.CRUD_NUEVO:
 				service.insert(bean);
 				break;
-			case ControllerUtil.CRUD_EDITAR: 
+			case ControllerUtil.CRUD_EDITAR:
 				service.update(bean);
 				break;
-			case ControllerUtil.CRUD_ELIMINAR: 
+			case ControllerUtil.CRUD_ELIMINAR:
 				service.delete(bean.getIdentifier().toString());
 				break;
-			case ControllerUtil.CRUD_RESTAURAR: 
+			case ControllerUtil.CRUD_RESTAURAR:
 				service.restore(bean.getIdentifier().toString());
 				break;
-			case ControllerUtil.CRUD_ELIMINATE: 
+			case ControllerUtil.CRUD_ELIMINATE:
 				service.eliminate(bean.getIdentifier().toString());
 				break;
 			default:

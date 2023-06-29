@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,6 +72,11 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="dropdown">
+							<button onclick="exportToExcel()" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> XLSX</button>
+							<button onclick="exportToPDF()" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+							<button onclick="exportToCSV()" class="btn btn-warning"><i class="fa-solid fa-file-csv"></i> CSV</button>
+						</div>
 					</div>
 					<div class="card" id="divRegistro" style="display: none;">
 						<div class="card-header">
@@ -86,22 +92,22 @@
 								<div class="col-md-4">
 									<label for="frmNames" class="form-label">Nombre</label> <input
 										type="text" class="form-control" id="frmNames" value="" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmLast_name" class="form-label">Apellido</label>
 									<input type="text" class="form-control" id="frmLast_name"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmNacionality" class="form-label">Nacionalidad</label>
 									<input type="text" class="form-control" id="frmNacionality"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-12">
 									<button class="btn btn-primary" id="btnProcesar" type="submit">Enviar
@@ -228,7 +234,7 @@
 							detalleTabla += "<td>" + item.last_name + "</td>";
 							detalleTabla += "<td>" + item.nacionality + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-warning' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";
@@ -256,7 +262,7 @@
 							detalleTabla += "<td>" + item.last_name + "</td>";
 							detalleTabla += "<td>" + item.nacionality + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-warning' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";

@@ -14,10 +14,8 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users> {
 
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM users WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM users WHERE active='I'";
-	private final String SQL_SELECT_ID = "SELECT * FROM users WHERE active='A' AND identifier=?";
-	private final String SQL_SELECT_LIKE = "SELECT * FROM users WHERE names LIKE ? AND last_name LIKE ? AND active='A'";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM users_active";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM users_inactive";
 	private final String SQL_INSERT = "INSERT INTO users (names, last_name, document_type, document_number, email, cellphone) VALUES (?,?,?,?,?,?)";
 	private final String SQL_UPDATE = "UPDATE users SET names=?, last_name=?, document_type=?, document_number=?, email=?, cellphone=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE users SET active='I' WHERE identifier=?";
@@ -27,9 +25,13 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 	@Override
 	public List<Users> getActive() {
 		List<Users> lista = new ArrayList<>();
-		try (Connection cn = AccesoDB.getConnection();
-				PreparedStatement pstm = cn.prepareStatement(SQL_SELECT_ACTIVE);
-				ResultSet rs = pstm.executeQuery();) {
+		Connection cn = null;
+		PreparedStatement pstm = null;
+		ResultSet rs;
+		try {
+			cn = AccesoDB.getConnection();
+			pstm = cn.prepareStatement(SQL_SELECT_ACTIVE);
+			rs = pstm.executeQuery();
 			while (rs.next()) {
 				Users bean = mapRow(rs);
 				lista.add(bean);
@@ -66,9 +68,11 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Users bean = null;
+		String sql;
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_ID);
+			sql = SQL_SELECT_ACTIVE + " WHERE identifier=?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setInt(1, Integer.parseInt(identifier));
 			rs = pstm.executeQuery();
 			if(rs.next()) {
@@ -94,12 +98,13 @@ public class CrudUsersService implements CrudServiceSpec<Users>, RowMapper<Users
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Users item;
-		String names, last_name;
+		String names, last_name, sql;
 		names = "%" + UtilService.setStringVacio(bean.getNames()) + "%";
 		last_name = "%" + UtilService.setStringVacio(bean.getLast_name()) + "%";
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
+			sql = SQL_SELECT_ACTIVE + " WHERE names LIKE ? AND last_name LIKE ?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setString(1, names);
 			pstm.setString(2, last_name);
 			rs = pstm.executeQuery();

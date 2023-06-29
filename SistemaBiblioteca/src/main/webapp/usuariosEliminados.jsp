@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,9 +49,9 @@
 										<th scope="col">Nombre</th>
 										<th scope="col">Apellido</th>
 										<th scope="col">Tipo Documento</th>
-										<th scope="col">Nº Documento</th>
-										<th scope="col">Correo Electrónico</th>
-										<th scope="col">Nº Celular</th>
+										<th scope="col">NÂº Documento</th>
+										<th scope="col">Correo ElectrÃ³nico</th>
+										<th scope="col">NÂº Celular</th>
 										<th scope="col">Accion</th>
 									</tr>
 								</thead>
@@ -73,15 +74,15 @@
 								<div class="col-md-4">
 									<label for="frmNames" class="form-label">Nombre</label> <input
 										type="text" class="form-control" id="frmNames" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmLast_name" class="form-label">Apellido</label>
 									<input type="text" class="form-control" id="frmLast_name"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-3">
 									<label for="frmDocument_type" class="form-label">Tipo Documento</label> <select
@@ -93,11 +94,11 @@
 									<div class="invalid-feedback">Seleccione un tipo de documento.</div>
 								</div>
 								<div class="col-md-3">
-									<label for="frmDocument_number" class="form-label">Nº Documento</label>
+									<label for="frmDocument_number" class="form-label">NÂº Documento</label>
 									<input type="number" class="form-control" id="frmDocument_number"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmEmail" class="form-label">Correo
@@ -105,15 +106,15 @@
 									<div class="input-group has-validation">
 										<input type="text" class="form-control" id="frmEmail"
 											aria-describedby="inputGroupPrepend" required>
-										<div class="valid-feedback">¡Se ve bien!</div>
-										<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+										<div class="valid-feedback">Â¡Se ve bien!</div>
+										<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 									</div>
 								</div>
 								<div class="col-md-4">
-									<label for="frmCellphone" class="form-label">Nº Celular</label> <input
+									<label for="frmCellphone" class="form-label">NÂº Celular</label> <input
 										type="number" class="form-control" id="frmCellphone" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-12">
 									<button class="btn btn-primary" id="btnProcesar" type="submit">Enviar

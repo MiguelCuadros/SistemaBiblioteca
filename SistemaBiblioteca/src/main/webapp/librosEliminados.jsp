@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@page import="pe.edu.vallegrande.app.model.Author"%>
 <%@page import="pe.edu.vallegrande.app.service.CrudAuthorService"%>
 <%@page import="pe.edu.vallegrande.app.service.CrudCategoryService"%>
@@ -78,23 +79,23 @@
 									<label for="frmTitle" class="form-label">Titulo</label> <input
 										type="text" class="form-control" id="frmTitle" value=""
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-2">
 									<label for="frmStock" class="form-label">Stock</label> <input
 										type="number" class="form-control" id="frmStock" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-3">
 									<label for="frmIsbn" class="form-label">ISBN</label> <input
 										type="number" class="form-control" id="frmIsbn" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmCategory" class="form-label">Categoria</label> <select

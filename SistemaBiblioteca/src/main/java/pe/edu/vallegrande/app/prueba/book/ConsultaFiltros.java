@@ -11,7 +11,7 @@ public class ConsultaFiltros {
 		try {
 			Book bean = new Book();
 			bean.setTitle("");
-			bean.setIsbn("");
+			bean.setCategory_identifier("Ficción");
 			CrudBookService bookService = new CrudBookService();
 			List<Book> lista = bookService.get(bean);
 			for (Book book : lista) {

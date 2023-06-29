@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,22 +87,22 @@
 								<div class="col-md-4">
 									<label for="frmNames" class="form-label">Nombre</label> <input
 										type="text" class="form-control" id="frmNames" value="" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmLast_name" class="form-label">Apellido</label>
 									<input type="text" class="form-control" id="frmLast_name"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmNacionality" class="form-label">Nacionalidad</label>
 									<input type="text" class="form-control" id="frmNacionality"
 										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
-									<div class="invalid-feedback">Por favor, coloque algo válido.</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
+									<div class="invalid-feedback">Por favor, coloque algo vÃ¡lido.</div>
 								</div>
 								<div class="col-12">
 									<button class="btn btn-primary" id="btnProcesar" type="submit">Enviar

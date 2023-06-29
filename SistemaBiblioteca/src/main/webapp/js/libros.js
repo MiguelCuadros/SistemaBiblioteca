@@ -5,11 +5,28 @@
   var form = document.querySelector('.needs-validation');
 
   // Obtener los campos del formulario
+  var titleInput = form.querySelector('#frmTitle');
   var stockInput = form.querySelector('#frmStock');
   var isbnInput = form.querySelector('#frmIsbn');
 
   // Expresión regular para validar números y longitud
   var regexNumbers = /^\d+$/;
+  var regexTitle = /^[A-Za-z0-9\s]+$/;
+  
+  // Función de validación personalizada para el título
+  function validateTitle(input) {
+    var value = input.value.trim();
+    if (!regexTitle.test(value)) {
+      input.setCustomValidity('Por favor, ingrese solo letras, espacios y números.');
+    } else {
+      input.setCustomValidity('');
+    }
+  }
+  
+  // Validar el campo de título al cambiar su valor
+  titleInput.addEventListener('input', function () {
+    validateTitle(titleInput);
+  });
 
   // Función de validación personalizada para números y longitud
   function validateNumbersLength(input, minLength, maxLength) {

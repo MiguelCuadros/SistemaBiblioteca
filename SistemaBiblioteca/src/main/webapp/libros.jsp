@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@page import="pe.edu.vallegrande.app.model.Author"%>
 <%@page import="pe.edu.vallegrande.app.service.CrudAuthorService"%>
 <%@page import="pe.edu.vallegrande.app.service.CrudCategoryService"%>
@@ -12,11 +13,13 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>Libros - SB Admin</title>
 <link href="css/styles.css" rel="stylesheet" />
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet">
-<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-	crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
 </head>
 <body class="sb-nav-fixed">
 	<jsp:include page="navbar.jsp"></jsp:include>
@@ -43,8 +46,8 @@
 										placeholder="Ingrese titulo">
 								</div>
 								<div class="col-sm-4">
-									<input type="text" class="form-control" id="isbn" name="isbn"
-										placeholder="Ingrese ISBN">
+									<input type="text" class="form-control" id="category_identifier" name="category_identifier"
+										placeholder="Ingrese categoria">
 								</div>
 								<div class="col-sm-2">
 									<button type="button" class="btn btn-primary mb-2"
@@ -78,6 +81,11 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="dropdown">
+							<button onclick="exportToExcel()" class="btn btn-success"><i class="fa-solid fa-file-excel"></i> XLSX</button>
+							<button onclick="exportToPDF()" class="btn btn-danger"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+							<button onclick="exportToCSV()" class="btn btn-warning"><i class="fa-solid fa-file-csv"></i> CSV</button>
+						</div>
 					</div>
 					<div class="card" id="divRegistro" style="display: none;">
 						<div class="card-header">
@@ -92,25 +100,24 @@
 								</div>
 								<div class="col-md-5">
 									<label for="frmTitle" class="form-label">Titulo</label> <input
-										type="text" class="form-control" id="frmTitle" value=""
-										required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+										type="text" class="form-control" id="frmTitle" value="" required>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-2">
 									<label for="frmStock" class="form-label">Stock</label> <input
 										type="number" class="form-control" id="frmStock" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-3">
 									<label for="frmIsbn" class="form-label">ISBN</label> <input
 										type="number" class="form-control" id="frmIsbn" required>
-									<div class="valid-feedback">¡Se ve bien!</div>
+									<div class="valid-feedback">Â¡Se ve bien!</div>
 									<div class="invalid-feedback">Por favor, coloque algo
-										válido.</div>
+										vÃ¡lido.</div>
 								</div>
 								<div class="col-md-4">
 									<label for="frmCategory" class="form-label">Categoria</label> <select
@@ -251,8 +258,8 @@
 
 	function fnBtnBuscar() {
 		let title = document.getElementById("title").value;
-		let isbn = document.getElementById("isbn").value;
-		let url = "BookBuscar?title=" + title + "&isbn=" + isbn;
+		let category_identifier = document.getElementById("category_identifier").value;
+		let url = "BookBuscar?title=" + title + "&category_identifier=" + category_identifier;
 		let xhttp = new XMLHttpRequest();
 		xhttp.open("GET", url, true);
 		xhttp.onreadystatechange = function() {
@@ -269,7 +276,7 @@
 							detalleTabla += "<td>" + item.category_identifier + "</td>";
 							detalleTabla += "<td>" + item.author_identifier + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-warning' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";
@@ -299,7 +306,7 @@
 							detalleTabla += "<td>" + item.category_identifier + "</td>";
 							detalleTabla += "<td>" + item.author_identifier + "</td>";
 							detalleTabla += "<td>";
-							detalleTabla += "<a class='btn btn-success' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
+							detalleTabla += "<a class='btn btn-warning' href='javascript:fnEditar(" + item.identifier + ");'><i class='fa-solid fa-pen'></i></a> ";
 							detalleTabla += "<a class='btn btn-danger' href='javascript:fnEliminar(" + item.identifier + ");'><i class='fa-solid fa-trash'></i></a>";
 							detalleTabla += "</td>";
 							detalleTabla += "</tr>";
@@ -347,6 +354,111 @@
 	function fnValidar(){
 		
 		return true;
+	}
+	
+	function exportToExcel() {
+        // Obtener los datos de la tabla
+        let rows = document.querySelectorAll("#detalleTabla tr");
+        // Crear una matriz de datos con las columnas deseadas
+        let data = [];
+        // Agregar los encabezados de columna
+        data.push(["ID", "TITULO", "STOCK", "ISBN", "CATEGORIA", "AUTOR"]);
+        rows.forEach(function(row) {
+          let rowData = [];
+          let columns = row.querySelectorAll("td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6)"); // Incluir solo las columnas deseadas
+          columns.forEach(function(column) {
+            rowData.push(column.innerText);
+          });
+          data.push(rowData);
+        });
+        // Crear una hoja de cÃ¡lculo de Excel
+        let worksheet = XLSX.utils.aoa_to_sheet(data);
+        // Crear un libro de Excel y agregar la hoja de cÃ¡lculo
+        let workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Libros");
+        // Guardar el archivo de Excel
+        XLSX.writeFile(workbook, "reporteLibros.xlsx");
+  	}
+
+	function exportToCSV() {
+	  // Obtener los datos de la tabla
+	  let table = document.getElementById("detalleTabla");
+	  let rows = table.getElementsByTagName("tr");
+	  let data = [];
+	  for (let i = 0; i < rows.length; i++) {
+	    let row = rows[i];
+	    let rowData = [];
+	    let cells = row.getElementsByTagName("td");
+	    for (let j = 0; j < cells.length; j++) {
+	      rowData.push(cells[j].innerText);
+	    }
+	    data.push(rowData);
+	  }
+
+	  // Convertir los datos en formato CSV
+	  let csv = Papa.unparse(data);
+
+	  // Descargar el archivo CSV
+	  let blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+	  let filename = "reporteLibros.csv";
+	  if (navigator.msSaveBlob) {
+	    // IE 10+
+	    navigator.msSaveBlob(blob, filename);
+	  } else {
+	    // Otros navegadores
+	    let link = document.createElement("a");
+	    if (link.download !== undefined) {
+	      let url = URL.createObjectURL(blob);
+	      link.setAttribute("href", url);
+	      link.setAttribute("download", filename);
+	      link.style.visibility = "hidden";
+	      document.body.appendChild(link);
+	      link.click();
+	      document.body.removeChild(link);
+	    }
+	  }
+	}
+	
+	function exportToPDF() {
+		// Crear un arreglo de encabezados
+		const headers = ['ID', 'TITLE', 'STOCK', 'ISBN', 'CATEGORIA', 'AUTOR'];
+
+		// Crear un arreglo de filas para los registros
+		const rows = arreglo.map((item) => [
+			item.identifier,
+			item.title,
+			item.stock,
+			item.isbn,
+			item.category_identifier,
+			item.author_identifier
+		]);
+
+		// Crear el documento PDF
+		const docDefinition = {
+			content: [
+				{ text: 'Reporte PDF - Libros', style: 'header' },
+				{
+					table: {
+						headerRows: 1,
+						widths: ['auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+						body: [
+							headers, // Agregar los encabezados al documento
+							...rows // Agregar las filas de registros al documento
+						]
+					}
+				}
+			],
+			styles: {
+				header: {
+					fontSize: 18,
+					bold: true,
+					alignment: 'center'
+				}
+			}
+		};
+
+		// Generar el archivo PDF
+		pdfMake.createPdf(docDefinition).download('reporteLibros.pdf');
 	}
 </script>
 </body>

@@ -46,8 +46,8 @@ public class BookController extends HttpServlet {
 		bean.setTitle(request.getParameter("title"));
 		bean.setStock(request.getParameter("stock"));
 		bean.setIsbn(request.getParameter("isbn"));
-		bean.setCategory_identifier(Integer.parseInt(request.getParameter("category_identifier")));
-		bean.setAuthor_identifier(Integer.parseInt(request.getParameter("author_identifier")));
+		bean.setCategory_identifier(request.getParameter("category_identifier"));
+		bean.setAuthor_identifier(request.getParameter("author_identifier"));
 		// Proceso
 		try {
 			switch (accion) {
@@ -78,11 +78,11 @@ public class BookController extends HttpServlet {
 	private void buscar(HttpServletRequest request, HttpServletResponse response) {
 		// Datos
 		String title = request.getParameter("title");
-		String isbn = request.getParameter("isbn");
+		String category_identifier = request.getParameter("category_identifier");
 		// Proceso
 		Book bean = new Book();
 		bean.setTitle(title);
-		bean.setIsbn(isbn);
+		bean.setCategory_identifier(category_identifier);
 		List<Book> lista = service.get(bean);
 		// Preparando el JSON
 		Gson gson = new Gson();

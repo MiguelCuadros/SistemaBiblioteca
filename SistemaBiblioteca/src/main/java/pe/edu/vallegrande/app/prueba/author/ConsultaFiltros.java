@@ -10,7 +10,7 @@ public class ConsultaFiltros {
 	public static void main(String[] args) {
 		try {
 			Author bean = new Author();
-			bean.setNames("Gabriel");
+			bean.setNames("");
 			bean.setLast_name("");
 			CrudAuthorService authorService = new CrudAuthorService();
 			List<Author> lista = authorService.get(bean);

@@ -14,10 +14,8 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudAuthorService implements CrudServiceSpec<Author>, RowMapper<Author> {
 
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM author WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM author WHERE active='I'";
-	private final String SQL_SELECT_ID = "SELECT * FROM author WHERE active='A' AND identifier=?";
-	private final String SQL_SELECT_LIKE = "SELECT * FROM author WHERE names LIKE ? AND last_name LIKE ? AND active='A'";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM author_active";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM author_inactive";
 	private final String SQL_INSERT = "INSERT INTO author (names, last_name, nacionality) VALUES (?,?,?)";
 	private final String SQL_UPDATE = "UPDATE author SET names=?, last_name=?, nacionality=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE author SET active='I' WHERE identifier=?";
@@ -66,9 +64,11 @@ public class CrudAuthorService implements CrudServiceSpec<Author>, RowMapper<Aut
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Author bean = null;
+		String sql;
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_ID);
+			sql = SQL_SELECT_ACTIVE + " WHERE identifier=?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setInt(1, Integer.parseInt(identifier));
 			rs = pstm.executeQuery();
 			if(rs.next()) {
@@ -94,12 +94,13 @@ public class CrudAuthorService implements CrudServiceSpec<Author>, RowMapper<Aut
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Author item;
-		String names, last_name;
+		String names, last_name, sql;
 		names = "%" + UtilService.setStringVacio(bean.getNames()) + "%";
 		last_name = "%" + UtilService.setStringVacio(bean.getLast_name()) + "%";
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
+			sql = SQL_SELECT_ACTIVE + " WHERE names LIKE ? AND last_name LIKE ?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setString(1, names);
 			pstm.setString(2, last_name);
 			rs = pstm.executeQuery();

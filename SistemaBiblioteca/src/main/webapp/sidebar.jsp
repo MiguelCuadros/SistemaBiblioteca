@@ -59,8 +59,8 @@
 				<div class="collapse" id="collapsePrestamos"
 					aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 					<nav class="sb-sidenav-menu-nested nav">
-						<a class="nav-link" href="prestamos.jsp"></a>
-						<a class="nav-link" href="prestamosEliminados.jsp"></a>
+						<a class="nav-link" href="prestamosNuevo.jsp">Nuevo</a>
+						<a class="nav-link" href="prestamos.jsp">Lista</a>
 					</nav>
 				</div>
 				<!-- Bibliotecario -->

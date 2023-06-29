@@ -2,15 +2,15 @@ package pe.edu.vallegrande.app.model;
 
 public class Book {
 
-	private Integer identifier, category_identifier, author_identifier;
-	private String title, stock, isbn, active;
+	private Integer identifier;
+	private String title, stock, isbn, active, category_identifier, author_identifier;
 
 	public Book() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Book(Integer identifier, String title, String stock, String isbn, Integer category_identifier,
-			Integer author_identifier, String active) {
+	public Book(Integer identifier, String title, String stock, String isbn, String category_identifier,
+			String author_identifier, String active) {
 		super();
 		this.author_identifier = author_identifier;
 		this.title = title;
@@ -21,8 +21,8 @@ public class Book {
 		this.active = active;
 	}
 
-	public Book(String title, String stock, String isbn, Integer category_identifier,
-			Integer author_identifier, String active) {
+	public Book(String title, String stock, String isbn, String category_identifier,
+			String author_identifier, String active) {
 		super();
 		this.title = title;
 		this.stock = stock;
@@ -33,7 +33,7 @@ public class Book {
 	}
 
 	public Book(Integer identifier, String title, String stock,
-			String isbn, Integer category_identifier, Integer author_identifier) {
+			String isbn, String category_identifier, String author_identifier) {
 		super();
 		this.identifier = identifier;
 		this.title = title;
@@ -43,7 +43,7 @@ public class Book {
 		this.author_identifier = author_identifier;
 	}
 
-	public Book(String title, String stock, String isbn, Integer category_identifier, Integer author_identifier) {
+	public Book(String title, String stock, String isbn, String category_identifier, String author_identifier) {
 		super();
 		this.title = title;
 		this.stock = stock;
@@ -92,19 +92,19 @@ public class Book {
 		this.identifier = identifier;
 	}
 
-	public Integer getCategory_identifier() {
+	public String getCategory_identifier() {
 		return category_identifier;
 	}
 
-	public void setCategory_identifier(Integer category_identifier) {
+	public void setCategory_identifier(String category_identifier) {
 		this.category_identifier = category_identifier;
 	}
 
-	public Integer getAuthor_identifier() {
+	public String getAuthor_identifier() {
 		return author_identifier;
 	}
 
-	public void setAuthor_identifier(Integer author_identifier) {
+	public void setAuthor_identifier(String author_identifier) {
 		this.author_identifier = author_identifier;
 	}
 

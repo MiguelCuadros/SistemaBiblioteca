@@ -14,10 +14,9 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 	
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM book WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM book WHERE active='I'";
-	private final String SQL_SELECT_ID = "SELECT identifier, title, stock, ISBN, category_identifier, author_identifier, active FROM book WHERE identifier=? AND active='A'";
-	private final String SQL_SELECT_LIKE = "SELECT identifier, title, stock, ISBN, category_identifier, author_identifier, active FROM book WHERE title LIKE ? AND ISBN LIKE ? AND active='A'";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM book_active";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM book_inactive";
+	private final String SQL_SELECT_LIKE = "SELECT b.identifier,b.title,b.stock,b.ISBN,c.names AS 'category_identifier',CONCAT(a.names,' ',UPPER(a.last_name)) AS 'author_identifier',b.active FROM book AS b INNER JOIN category AS c ON b.category_identifier = c.identifier INNER JOIN author AS a ON b.author_identifier = a.identifier WHERE b.active='A' AND b.title LIKE ? AND c.names LIKE ?";
 	private final String SQL_INSERT = "INSERT INTO book (title, stock, ISBN, category_identifier, author_identifier) VALUES (?,?,?,?,?)";
 	private final String SQL_UPDATE = "UPDATE book SET title=?, stock=?, ISBN=?, category_identifier=?, author_identifier=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE book SET active='I' WHERE identifier=?";
@@ -66,9 +65,11 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Book bean = null;
+		String sql;
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_ID);
+			sql = SQL_SELECT_ACTIVE + " WHERE identifier=?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setInt(1, Integer.parseInt(identifier));
 			rs = pstm.executeQuery();
 			if(rs.next()) {
@@ -94,14 +95,14 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Book item;
-		String title, isbn;
+		String title, category;
 		title = "%" + UtilService.setStringVacio(bean.getTitle()) + "%";
-		isbn = "%" + UtilService.setStringVacio(bean.getIsbn()) + "%";
+		category = "%" + UtilService.setStringVacio(bean.getCategory_identifier()) + "%";
 		try {
 			cn = AccesoDB.getConnection();
 			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
 			pstm.setString(1, title);
-			pstm.setString(2, isbn);
+			pstm.setString(2, category);
 			rs = pstm.executeQuery();
 			while(rs.next()) {
 				item = mapRow(rs);
@@ -132,8 +133,8 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 			pstm.setString(1, bean.getTitle());
 			pstm.setString(2, bean.getStock());
 			pstm.setString(3, bean.getIsbn());
-			pstm.setInt(4, bean.getCategory_identifier());
-			pstm.setInt(5, bean.getAuthor_identifier());
+			pstm.setString(4, bean.getCategory_identifier());
+			pstm.setString(5, bean.getAuthor_identifier());
 			filas = pstm.executeUpdate();
 			pstm.close();
 			if (filas != 1) {
@@ -166,8 +167,8 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 			pstm.setString(1, bean.getTitle());
 			pstm.setString(2, bean.getStock());
 			pstm.setString(3, bean.getIsbn());
-			pstm.setInt(4, bean.getCategory_identifier());
-			pstm.setInt(5, bean.getAuthor_identifier());
+			pstm.setString(4, bean.getCategory_identifier());
+			pstm.setString(5, bean.getAuthor_identifier());
 			pstm.setInt(6, bean.getIdentifier());
 			filas = pstm.executeUpdate();
 			pstm.close();
@@ -277,8 +278,8 @@ public class CrudBookService implements CrudServiceSpec<Book>, RowMapper<Book> {
 		bean.setTitle(rs.getString("title"));
 		bean.setStock(rs.getString("stock"));
 		bean.setIsbn(rs.getString("ISBN"));
-		bean.setCategory_identifier(rs.getInt("category_identifier"));
-		bean.setAuthor_identifier(rs.getInt("author_identifier"));
+		bean.setCategory_identifier(rs.getString("category_identifier"));
+		bean.setAuthor_identifier(rs.getString("author_identifier"));
 		bean.setActive(rs.getString("active"));
 		return bean;
 	}

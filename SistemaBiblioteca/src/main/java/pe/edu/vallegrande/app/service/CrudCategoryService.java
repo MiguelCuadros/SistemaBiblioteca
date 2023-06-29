@@ -14,10 +14,8 @@ import pe.edu.vallegrande.app.service.spec.RowMapper;
 
 public class CrudCategoryService implements CrudServiceSpec<Category>, RowMapper<Category> {
 
-	private final String SQL_SELECT_ACTIVE = "SELECT * FROM category WHERE active='A'";
-	private final String SQL_SELECT_INACTIVE = "SELECT * FROM category WHERE active='I'";
-	private final String SQL_SELECT_ID = "SELECT * FROM category WHERE active='A' AND identifier=?";
-	private final String SQL_SELECT_LIKE = "SELECT * FROM category WHERE names LIKE ? AND active='A'";
+	private final String SQL_SELECT_ACTIVE = "SELECT * FROM category_active";
+	private final String SQL_SELECT_INACTIVE = "SELECT * FROM category_inactive";
 	private final String SQL_INSERT = "INSERT INTO category (names, descriptions) VALUES (?,?)";
 	private final String SQL_UPDATE = "UPDATE category SET names=?, descriptions=? WHERE identifier=?";
 	private final String SQL_DELETE = "UPDATE category SET active='I' WHERE identifier=?";
@@ -66,9 +64,11 @@ public class CrudCategoryService implements CrudServiceSpec<Category>, RowMapper
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Category bean = null;
+		String sql;
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_ID);
+			sql = SQL_SELECT_ACTIVE + " WHERE identifier=?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setInt(1, Integer.parseInt(identifier));
 			rs = pstm.executeQuery();
 			if(rs.next()) {
@@ -94,11 +94,12 @@ public class CrudCategoryService implements CrudServiceSpec<Category>, RowMapper
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		Category item;
-		String names;
+		String names, sql;
 		names = "%" + UtilService.setStringVacio(bean.getNames()) + "%";
 		try {
 			cn = AccesoDB.getConnection();
-			pstm = cn.prepareStatement(SQL_SELECT_LIKE);
+			sql = SQL_SELECT_ACTIVE + " WHERE names LIKE ?";
+			pstm = cn.prepareStatement(sql);
 			pstm.setString(1, names);
 			rs = pstm.executeQuery();
 			while(rs.next()) {
